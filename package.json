@@ -1,0 +1,27 @@
+{
+  "name": "conditional-period",
+  "version": "0.1.0",
+  "description": "ConditionalPeriod is a JS class allowing to store 2 numerical/Duration intervals resulting in a Duration.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no tests yet\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Max13/conditional-period-js.git"
+  },
+  "keywords": [
+    "js",
+    "dateinterval",
+    "conditional-statements"
+  ],
+  "author": "Adnan RIHAN <adnan@rihan.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Max13/conditional-period-js/issues"
+  },
+  "homepage": "https://github.com/Max13/conditional-period-js#readme",
+  "dependencies": {
+    "luxon": "^1.11.3"
+  }
+}
