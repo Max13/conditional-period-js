@@ -1,3 +1,8 @@
-exports.printMsg = function() {
-    console.log("This is a message from the demo package");
-}
+const ConditionalType = Object.freeze({
+    CATEGORY: 'C',
+    DURATION: 'D',
+});
+
+module.exports = {
+    ConditionalType:    ConditionalType,
+};

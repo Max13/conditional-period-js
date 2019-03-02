@@ -4,7 +4,7 @@
   "description": "ConditionalPeriod is a JS class allowing to store 2 numerical/Duration intervals resulting in a Duration.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no tests yet\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/Max13/conditional-period-js#readme",
   "dependencies": {
     "luxon": "^1.11.3"
+  },
+  "devDependencies": {
+    "mocha": "^6.0.2"
   }
 }
