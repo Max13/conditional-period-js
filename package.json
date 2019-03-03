@@ -25,6 +25,7 @@
     "luxon": "^1.11.3"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "mocha": "^6.0.2"
   }
 }
