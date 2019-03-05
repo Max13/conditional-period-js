@@ -61,13 +61,14 @@ class ConditionalCollection {
     /**
      * Instanciate an ConditionalCollection from an array of ConditionalPeriod
      *
+     * @param  Array                 Array of ConditionalPeriod
      * @return ConditionalCollection
      *
      * @throws TypeError
      */
     static fromArray(array) {
         if (!Array.isArray(array)) {
-            throw new TypeError('First argument of fromArray() must be an array. ' + typeof $array + ' given.');
+            throw new TypeError('First argument of fromArray() must be an array. ' + typeof array + ' given.');
         }
 
         let collection = new this;
@@ -136,7 +137,7 @@ class ConditionalCollection {
         if (typeof value === 'string') {
             value = Duration.fromISO(value);
         } else if (!Number.isInteger(value) && !(value instanceof Duration)) {
-            throw new TypeError('Only Duration (as object or string form) or integers can be found. Given: ' + typeof $value);
+            throw new TypeError('Only Duration (as object or string form) or integers can be found. Given: ' + typeof value);
         }
 
         for (let period of this.container) {
