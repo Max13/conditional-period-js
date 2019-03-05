@@ -89,6 +89,22 @@ class ConditionalCollection {
     }
 
     /**
+     * Instanciate an ConditionalCollection from a JSON string
+     *
+     * @param  String                 JSON string of a ConditionalCollection
+     * @return ConditionalCollection
+     *
+     * @throws TypeError
+     */
+    static fromJson(json) {
+        if (typeof json !== 'string') {
+            throw new TypeError('First argument of fromJson() must be a string. ' + typeof json + ' given.');
+        }
+
+        return this.fromArray(JSON.parse(json));
+    }
+
+    /**
      * Push a given ConditionalPeriod in the container, at given index or last
      * and returns this.
      *
@@ -147,6 +163,30 @@ class ConditionalCollection {
         }
 
         return null;
+    }
+
+    /**
+     * Arrayify this object
+     *
+     * @return Array Array of ConditionalPeriod
+     */
+    toArray() {
+        let array = [];
+
+        for (let period of this.container) {
+            array.push(period.toString());
+        }
+
+        return array;
+    }
+
+    /**
+     * Serialize this object to JSON
+     *
+     * @return string JSON string of ConditionalCollection
+     */
+    toJson() {
+        return JSON.stringify(this.toArray);
     }
 
     /**

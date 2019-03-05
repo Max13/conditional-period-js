@@ -107,6 +107,43 @@ describe('ConditionalCollection tests', function () {
         assert.deepEqual(arr, c.container);
     });
 
+    it('Fails instanciating a ConditionalCollection.fromJson() with incorrect values', function () {
+        let exception = /^First argument of fromJson\(\) must be a string/;
+
+        assert.throws(() => ConditionalCollection.fromJson(null), exception);
+        assert.throws(() => ConditionalCollection.fromJson(-1), exception);
+        assert.throws(() => ConditionalCollection.fromJson(0), exception);
+        assert.throws(() => ConditionalCollection.fromJson(1), exception);
+        assert.throws(() => ConditionalCollection.fromJson(2), exception);
+        assert.throws(() => ConditionalCollection.fromJson({}), exception);
+        assert.throws(() => ConditionalCollection.fromJson(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.fromJson(new ConditionalCollection), exception);
+    });
+
+    it('Instanciate a ConditionalCollection from json (Category)', function () {
+        let arr = [
+                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')),
+            ],
+            c = ConditionalCollection.fromJson('["C1-2P1D","C3-4P2D"]');
+
+        assert.instanceOf(c, ConditionalCollection);
+        assert.deepEqual(arr, c.container);
+    });
+
+    it('Instanciate a ConditionalCollection from json (Duration)', function () {
+        let arr = [
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')),
+            ],
+            c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]');
+
+        console.log(c);
+
+        assert.instanceOf(c, ConditionalCollection);
+        assert.deepEqual(arr, c.container);
+    });
+
     it('Fails pushing in a ConditionalCollection with incorrect values', function () {
         let c = new ConditionalCollection,
             exception = /^Only ConditionalPeriod \(as object or string form\) can be stored/;
