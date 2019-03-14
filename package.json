@@ -1,6 +1,6 @@
 {
   "name": "conditional-period",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "ConditionalPeriod is a JS class allowing to store 2 numerical/Duration intervals resulting in a Duration.",
   "main": "src/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "keywords": [
     "js",
     "duration",
-    "moment",
+    "luxon",
     "conditional-statements"
   ],
   "author": "Adnan RIHAN <adnan@rihan.fr>",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Max13/conditional-period-js#readme",
   "dependencies": {
-    "moment": "^2.24.0"
+    "luxon": "^1.11.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",

@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { Duration } = require('luxon');
 const ConditionalPeriod = require('./ConditionalPeriod.js');
 const ConditionalType = require('./ConditionalType.js');
 
@@ -151,8 +151,8 @@ class ConditionalCollection {
      */
     find(value) {
         if (typeof value === 'string') {
-            value = moment.duration(value);
-        } else if (!Number.isInteger(value) && !moment.isDuration(value)) {
+            value = Duration.fromISO(value);
+        } else if (!Number.isInteger(value) && !(value instanceof Duration)) {
             throw new TypeError('Only Duration (as object or string form) or integers can be found. Given: ' + typeof value);
         }
 
