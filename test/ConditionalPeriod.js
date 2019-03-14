@@ -37,7 +37,7 @@ describe('ConditionalPeriod tests', function () {
         let type = ConditionalType.DURATION,
             upper = moment.duration('P1D'),
             result = moment.duration('P1D'),
-            exception = /^The second argument must be a valid Duration, or an iso8601 duration string/;
+            exception = /^The second argument must be a valid moment.duration, or an iso8601 duration string/;
 
         assert.throws(() => new ConditionalPeriod(type, null, upper, result), exception);
         assert.throws(() => new ConditionalPeriod(type, -1, upper, result), exception);
@@ -65,7 +65,7 @@ describe('ConditionalPeriod tests', function () {
         let type = ConditionalType.DURATION,
             lower = moment.duration('P3D'),
             result = moment.duration('P1D'),
-            exception = /^The third argument must be a valid Duration, or an iso8601 duration string/;
+            exception = /^The third argument must be a valid moment.duration, or an iso8601 duration string/;
 
         assert.throws(() => new ConditionalPeriod(type, lower, null, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, -1, result), exception);
@@ -80,7 +80,7 @@ describe('ConditionalPeriod tests', function () {
         let type = ConditionalType.CATEGORY,
             lower = 1,
             upper = 2,
-            exception = /^The fourth argument must be a valid Duration, or an iso8601 duration string/;
+            exception = /^The fourth argument must be a valid moment.duration, or an iso8601 duration string/;
 
         assert.throws(() => new ConditionalPeriod(type, lower, upper, null), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, upper, -1), exception);

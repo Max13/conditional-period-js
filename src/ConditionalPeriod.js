@@ -42,7 +42,7 @@ class ConditionalPeriod {
             }
         } else {
             if (!(moment.isDuration(value)) && typeof value !== 'string') {
-                throw new TypeError('The second argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
+                throw new TypeError('The second argument must be a valid moment.duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
             value = moment.isDuration(value) ? value : moment.duration(value);
         }
@@ -68,7 +68,7 @@ class ConditionalPeriod {
             }
         } else {
             if (!(moment.isDuration(value)) && typeof value !== 'string') {
-                throw new TypeError('The third argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
+                throw new TypeError('The third argument must be a valid moment.duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
             value = moment.isDuration(value) ? value : moment.duration(value);
         }
@@ -95,7 +95,7 @@ class ConditionalPeriod {
      */
     checkResultArgument(value) {
         if (!(moment.isDuration(value)) && typeof value !== 'string') {
-            throw new TypeError('The fourth argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
+            throw new TypeError('The fourth argument must be a valid moment.duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
         }
 
         return moment.isDuration(value) ? value : moment.duration(value);
