@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const { ConditionalCollection, ConditionalPeriod, ConditionalType } = require('../src/index.js');
-const { Duration } = require('luxon');
+const moment = require('moment');
 
 describe('ConditionalCollection tests', function () {
 
@@ -20,19 +20,19 @@ describe('ConditionalCollection tests', function () {
         assert.throws(() => ConditionalCollection.create(2), exception);
         assert.throws(() => ConditionalCollection.create({}), exception);
         assert.throws(() => ConditionalCollection.create([]), exception);
-        assert.throws(() => ConditionalCollection.create(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.create(moment.duration('P1D')), exception);
         assert.throws(() => ConditionalCollection.create(new ConditionalCollection), exception);
     });
 
     it('Creating a ConditionalCollection with a Category ConditionalPeriod', function () {
-        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'));
+        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, moment.duration('P1D'));
 
         assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0]);
         assert.deepEqual(cp, ConditionalCollection.create(cp).container[0]);
     });
 
     it('Creating a ConditionalCollection with a Duration ConditionalPeriod', function () {
-        let cp = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P3D'));
+        let cp = new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P1D'), moment.duration('P2D'), moment.duration('P3D'));
 
         assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0]);
         assert.deepEqual(cp, ConditionalCollection.create(cp).container[0]);
@@ -48,7 +48,7 @@ describe('ConditionalCollection tests', function () {
         assert.throws(() => ConditionalCollection.parse(2), exception);
         assert.throws(() => ConditionalCollection.parse({}), exception);
         assert.throws(() => ConditionalCollection.parse([]), exception);
-        assert.throws(() => ConditionalCollection.parse(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.parse(moment.duration('P1D')), exception);
         assert.throws(() => ConditionalCollection.parse(new ConditionalCollection), exception);
         assert.throws(() => ConditionalCollection.parse('ABCDE'), /^Invalid string format/);
     });
@@ -56,8 +56,8 @@ describe('ConditionalCollection tests', function () {
     it('Parsing a ConditionalCollection with a Category ConditionalPeriod', function () {
         let c = new ConditionalCollection;
 
-        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')));
-        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, moment.duration('P1D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, moment.duration('P2D')));
 
         assert.deepEqual(c, ConditionalCollection.parse('C1-2P1D,C3-4P2D'));
     });
@@ -65,8 +65,8 @@ describe('ConditionalCollection tests', function () {
     it('Creating a ConditionalCollection with a Duration ConditionalPeriod', function () {
         let c = new ConditionalCollection;
 
-        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')));
-        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P1D'), moment.duration('P2D'), moment.duration('P1D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P4D'), moment.duration('P2D')));
 
         assert.deepEqual(c, ConditionalCollection.parse('DP1DP2DP1D,DP3DP4DP2D'));
     });
@@ -80,15 +80,15 @@ describe('ConditionalCollection tests', function () {
         assert.throws(() => ConditionalCollection.fromArray(1), exception);
         assert.throws(() => ConditionalCollection.fromArray(2), exception);
         assert.throws(() => ConditionalCollection.fromArray({}), exception);
-        assert.throws(() => ConditionalCollection.fromArray(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.fromArray(moment.duration('P1D')), exception);
         assert.throws(() => ConditionalCollection.fromArray(new ConditionalCollection), exception);
         assert.throws(() => ConditionalCollection.fromArray('ABCDE'), exception);
     });
 
     it('Instanciate a ConditionalCollection from array (Category)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -98,8 +98,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Instanciate a ConditionalCollection from array (Duration)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P1D'), moment.duration('P2D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P4D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -116,14 +116,14 @@ describe('ConditionalCollection tests', function () {
         assert.throws(() => ConditionalCollection.fromJson(1), exception);
         assert.throws(() => ConditionalCollection.fromJson(2), exception);
         assert.throws(() => ConditionalCollection.fromJson({}), exception);
-        assert.throws(() => ConditionalCollection.fromJson(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.fromJson(moment.duration('P1D')), exception);
         assert.throws(() => ConditionalCollection.fromJson(new ConditionalCollection), exception);
     });
 
     it('Instanciate a ConditionalCollection from json (Category)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromJson('["C1-2P1D","C3-4P2D"]');
 
@@ -133,8 +133,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Instanciate a ConditionalCollection from json (Duration)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P1D'), moment.duration('P2D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P4D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]');
 
@@ -155,15 +155,15 @@ describe('ConditionalCollection tests', function () {
         assert.throws(() => c.push(2), exception);
         assert.throws(() => c.push({}), exception);
         assert.throws(() => c.push([]), exception);
-        assert.throws(() => c.push(Duration.fromISO('P1D')), exception);
+        assert.throws(() => c.push(moment.duration('P1D')), exception);
         assert.throws(() => c.push(new ConditionalCollection), exception);
         assert.throws(() => c.push('ABCDE'), /^Invalid string format/);
     });
 
     it('Pushing in a ConditionalCollection with a Category ConditionalPeriod', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, moment.duration('P2D')),
             ],
             c = new ConditionalCollection;
 
@@ -176,8 +176,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Pushing in a ConditionalCollection with a Duration ConditionalPeriod', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P1D'), moment.duration('P2D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P4D'), moment.duration('P2D')),
             ],
             c = new ConditionalCollection;
 
@@ -200,8 +200,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Fails finding out of Category ConditionalCollection boundaries', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -213,8 +213,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Finds in Category ConditionalCollection boundaries', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -228,36 +228,36 @@ describe('ConditionalCollection tests', function () {
 
     it('Fails finding out of Duration ConditionalCollection boundaries with Duration', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
-        assert.isNull(c.find(Duration.fromISO('P1D')));
-        assert.isNull(c.find(Duration.fromISO('P2D')));
-        assert.isNull(c.find(Duration.fromISO('P9D')));
-        assert.isNull(c.find(Duration.fromISO('P10D')));
+        assert.isNull(c.find(moment.duration('P1D')));
+        assert.isNull(c.find(moment.duration('P2D')));
+        assert.isNull(c.find(moment.duration('P9D')));
+        assert.isNull(c.find(moment.duration('P10D')));
     });
 
     it('Finds in Duration ConditionalCollection boundaries with Duration', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
-        assert.strictEqual(c.find(Duration.fromISO('P3D')), arr[0]);
-        assert.strictEqual(c.find(Duration.fromISO('P4D')), arr[0]);
-        assert.strictEqual(c.find(Duration.fromISO('P5D')), arr[0]);
-        assert.strictEqual(c.find(Duration.fromISO('P6D')), arr[1]);
-        assert.strictEqual(c.find(Duration.fromISO('P7D')), arr[1]);
-        assert.strictEqual(c.find(Duration.fromISO('P8D')), arr[1]);
+        assert.strictEqual(c.find(moment.duration('P3D')), arr[0]);
+        assert.strictEqual(c.find(moment.duration('P4D')), arr[0]);
+        assert.strictEqual(c.find(moment.duration('P5D')), arr[0]);
+        assert.strictEqual(c.find(moment.duration('P6D')), arr[1]);
+        assert.strictEqual(c.find(moment.duration('P7D')), arr[1]);
+        assert.strictEqual(c.find(moment.duration('P8D')), arr[1]);
     });
 
     it('Fails finding out of Duration ConditionalCollection boundaries with iso8601', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -269,8 +269,8 @@ describe('ConditionalCollection tests', function () {
 
     it('Finds in Duration ConditionalCollection boundaries with iso8601', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P1D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P2D')),
             ],
             c = ConditionalCollection.fromArray(arr);
 
@@ -285,9 +285,9 @@ describe('ConditionalCollection tests', function () {
     it('Correctly toString() for Category ConditionalCollection', function () {
         let cString = 'C3-5P10D,C6-8P20D,C9-11P30D',
             c = ConditionalCollection.fromArray([
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, Duration.fromISO('P10D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, Duration.fromISO('P20D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 9, 11, Duration.fromISO('P30D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, moment.duration('P10D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, moment.duration('P20D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 9, 11, moment.duration('P30D')),
             ]);
 
         assert.strictEqual(cString, c.toString());
@@ -297,9 +297,9 @@ describe('ConditionalCollection tests', function () {
     it('Correctly toString() for Duration ConditionalCollection', function () {
         let cString = 'DP3DP5DP10D,DP6DP8DP20D,DP9DP11DP30D',
             c = ConditionalCollection.fromArray([
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P10D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P20D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P9D'), Duration.fromISO('P11D'), Duration.fromISO('P30D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P10D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P20D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P9D'), moment.duration('P11D'), moment.duration('P30D')),
             ]);
 
         assert.strictEqual(cString, c.toString());
@@ -308,9 +308,9 @@ describe('ConditionalCollection tests', function () {
 
     it('Correctly outputs length for Category ConditionalCollection', function () {
         let c = ConditionalCollection.fromArray([
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, Duration.fromISO('P10D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, Duration.fromISO('P20D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 9, 11, Duration.fromISO('P30D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, moment.duration('P10D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 6, 8, moment.duration('P20D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 9, 11, moment.duration('P30D')),
             ]);
 
         assert.strictEqual(c.length, 3);
@@ -318,9 +318,9 @@ describe('ConditionalCollection tests', function () {
 
     it('Correctly outputs length for Duration ConditionalCollection', function () {
         let c = ConditionalCollection.fromArray([
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P10D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P20D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P9D'), Duration.fromISO('P11D'), Duration.fromISO('P30D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P3D'), moment.duration('P5D'), moment.duration('P10D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P6D'), moment.duration('P8D'), moment.duration('P20D')),
+                new ConditionalPeriod(ConditionalType.DURATION, moment.duration('P9D'), moment.duration('P11D'), moment.duration('P30D')),
             ]);
 
         assert.strictEqual(c.length, 3);

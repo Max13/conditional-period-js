@@ -13,7 +13,7 @@
   "keywords": [
     "js",
     "duration",
-    "luxon",
+    "moment",
     "conditional-statements"
   ],
   "author": "Adnan RIHAN <adnan@rihan.fr>",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Max13/conditional-period-js#readme",
   "dependencies": {
-    "luxon": "^1.11.3"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

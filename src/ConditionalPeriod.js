@@ -1,4 +1,4 @@
-const { Duration } = require('luxon');
+const moment = require('moment');
 const ConditionalType = require('./ConditionalType.js');
 
 /**
@@ -41,10 +41,10 @@ class ConditionalPeriod {
                 throw new TypeError('The second argument must be a valid category (Non null, positive integer). Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
         } else {
-            if (!(value instanceof Duration) && typeof value !== 'string') {
+            if (!(moment.isDuration(value)) && typeof value !== 'string') {
                 throw new TypeError('The second argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
-            value = value instanceof Duration ? value : Duration.fromISO(value);
+            value = moment.isDuration(value) ? value : moment.duration(value);
         }
 
         return value;
@@ -67,15 +67,15 @@ class ConditionalPeriod {
                 throw new TypeError('The third argument must be a valid category (Non null, positive integer). Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
         } else {
-            if (!(value instanceof Duration) && typeof value !== 'string') {
+            if (!(moment.isDuration(value)) && typeof value !== 'string') {
                 throw new TypeError('The third argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
-            value = value instanceof Duration ? value : Duration.fromISO(value);
+            value = moment.isDuration(value) ? value : moment.duration(value);
         }
 
         if (
             (this.type === ConditionalType.CATEGORY && value < this.lower)
-            || (this.type === ConditionalType.DURATION && value.shiftTo('seconds') < this.lower.shiftTo('seconds'))
+            || (this.type === ConditionalType.DURATION && value.asSeconds() < this.lower.asSeconds())
         ) {
             throw new TypeError('The third argument must be greater than or equal to lower). lower was (' + this.lower + ') and upper was (' + value + ')');
         }
@@ -94,11 +94,11 @@ class ConditionalPeriod {
      * @throws TypeError
      */
     checkResultArgument(value) {
-        if (!(value instanceof Duration) && typeof value !== 'string') {
+        if (!(moment.isDuration(value)) && typeof value !== 'string') {
             throw new TypeError('The fourth argument must be a valid Duration, or an iso8601 duration string. Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
         }
 
-        return value instanceof Duration ? value : Duration.fromISO(value);
+        return moment.isDuration(value) ? value : moment.duration(value);
     }
 
     /**
@@ -200,9 +200,9 @@ class ConditionalPeriod {
     match(value) {
         value = this.checkLowerArgument(value);
 
-        if (value instanceof Duration) {
-            return value.shiftTo('seconds') >= this.lower.shiftTo('seconds')
-                   && value.shiftTo('seconds') <= this.upper.shiftTo('seconds')
+        if (moment.isDuration(value)) {
+            return value.asSeconds() >= this.lower.asSeconds()
+                   && value.asSeconds() <= this.upper.asSeconds()
         }
 
         return value >= this.lower && value <= this.upper;
@@ -216,9 +216,9 @@ class ConditionalPeriod {
     toString() {
         let str = this.type;
 
-        str += this.lower instanceof Duration ? this.lower.toISO() : this.lower + '-';
-        str += this.upper instanceof Duration ? this.upper.toISO() : this.upper;
-        str += this.result.toISO();
+        str += moment.isDuration(this.lower) ? this.lower.toISOString() : this.lower + '-';
+        str += moment.isDuration(this.upper) ? this.upper.toISOString() : this.upper;
+        str += this.result.toISOString();
 
         return str;
     }
