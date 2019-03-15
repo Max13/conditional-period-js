@@ -50,13 +50,12 @@ describe('ConditionalPeriod tests', function () {
         let type = ConditionalType.CATEGORY,
             lower = 3,
             result = Duration.fromISO('P1D'),
-            exception = /^The third argument must be a valid category \(Non null, positive integer\)/;
+            exception = /^The third argument must be a valid category \(>= 0\)/;
 
         assert.throws(() => new ConditionalPeriod(type, lower, null, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, -1, result), exception);
-        assert.throws(() => new ConditionalPeriod(type, lower, 0, result), exception);
-        assert.throws(() => new ConditionalPeriod(type, lower, 1, result), /^The third argument must be greater than or equal to lower/);
-        assert.throws(() => new ConditionalPeriod(type, lower, 2, result), /^The third argument must be greater than or equal to lower/);
+        assert.throws(() => new ConditionalPeriod(type, lower, 1, result), /^The third argument must be greater than or equal to lower, or/);
+        assert.throws(() => new ConditionalPeriod(type, lower, 2, result), /^The third argument must be greater than or equal to lower, or/);
         assert.throws(() => new ConditionalPeriod(type, lower, {}, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, [], result), exception);
     });
@@ -70,8 +69,8 @@ describe('ConditionalPeriod tests', function () {
         assert.throws(() => new ConditionalPeriod(type, lower, null, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, -1, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, 0, result), exception);
-        assert.throws(() => new ConditionalPeriod(type, lower, Duration.fromISO('P1D'), result), /^The third argument must be greater than or equal to lower/);
-        assert.throws(() => new ConditionalPeriod(type, lower, Duration.fromISO('P2D'), result), /^The third argument must be greater than or equal to lower/);
+        assert.throws(() => new ConditionalPeriod(type, lower, Duration.fromISO('P1D'), result), /^The third argument must be greater than or equal to lower, or/);
+        assert.throws(() => new ConditionalPeriod(type, lower, Duration.fromISO('P2D'), result), /^The third argument must be greater than or equal to lower, or/);
         assert.throws(() => new ConditionalPeriod(type, lower, {}, result), exception);
         assert.throws(() => new ConditionalPeriod(type, lower, [], result), exception);
     });
@@ -101,6 +100,16 @@ describe('ConditionalPeriod tests', function () {
         assert.isTrue(c.result.equals(Duration.fromISO('P1D')));
     });
 
+    it('Can instanciate a Category ConditionalPeriod with 0 upper', function () {
+        let c = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 0, Duration.fromISO('P1D'));
+
+        assert.isTrue(c instanceof ConditionalPeriod);
+        assert.strictEqual(c.type, ConditionalType.CATEGORY);
+        assert.strictEqual(c.lower, 1);
+        assert.strictEqual(c.upper, 0);
+        assert.isTrue(c.result.equals(Duration.fromISO('P1D')));
+    });
+
     it('Can instanciate a Duration ConditionalPeriod with Duration', function () {
         let c = new ConditionalPeriod(
             ConditionalType.DURATION,
@@ -116,6 +125,21 @@ describe('ConditionalPeriod tests', function () {
         assert.isTrue(c.result.equals(Duration.fromISO('P3D')));
     });
 
+    it('Can instanciate a Duration ConditionalPeriod with Duration as 0', function () {
+        let c = new ConditionalPeriod(
+            ConditionalType.DURATION,
+            Duration.fromISO('P1D'),
+            Duration.fromISO('P0D'),
+            Duration.fromISO('P3D'),
+        );
+
+        assert.isTrue(c instanceof ConditionalPeriod);
+        assert.strictEqual(c.type, ConditionalType.DURATION);
+        assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
+        assert.isTrue(c.upper.equals(Duration.fromISO('P0D')));
+        assert.isTrue(c.result.equals(Duration.fromISO('P3D')));
+    });
+
     it('Can instanciate a Duration ConditionalPeriod with iso8601 string', function () {
         let c = new ConditionalPeriod(
             ConditionalType.DURATION,
@@ -128,6 +152,21 @@ describe('ConditionalPeriod tests', function () {
         assert.strictEqual(c.type, ConditionalType.DURATION);
         assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
         assert.isTrue(c.upper.equals(Duration.fromISO('P2D')));
+        assert.isTrue(c.result.equals(Duration.fromISO('P3D')));
+    });
+
+    it('Can instanciate a Duration ConditionalPeriod with iso8601 string as 0', function () {
+        let c = new ConditionalPeriod(
+            ConditionalType.DURATION,
+            'P1D',
+            'P0D',
+            'P3D',
+        );
+
+        assert.isTrue(c instanceof ConditionalPeriod);
+        assert.strictEqual(c.type, ConditionalType.DURATION);
+        assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
+        assert.isTrue(c.upper.equals(Duration.fromISO('P0D')));
         assert.isTrue(c.result.equals(Duration.fromISO('P3D')));
     });
 

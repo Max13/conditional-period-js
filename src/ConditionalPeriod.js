@@ -63,8 +63,8 @@ class ConditionalPeriod {
      */
     checkUpperArgument(value) {
         if (this.type === ConditionalType.CATEGORY) {
-            if (!Number.isInteger(value) || value <= 0) {
-                throw new TypeError('The third argument must be a valid category (Non null, positive integer). Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
+            if (!Number.isInteger(value) || value < 0) {
+                throw new TypeError('The third argument must be a valid category (>= 0). Input was: (' + typeof value + ')' + (['integer', 'string'].indexOf(typeof value) !== -1 ? value : null));
             }
         } else {
             if (!(value instanceof Duration) && typeof value !== 'string') {
@@ -74,10 +74,17 @@ class ConditionalPeriod {
         }
 
         if (
-            (this.type === ConditionalType.CATEGORY && value < this.lower)
-            || (this.type === ConditionalType.DURATION && value.shiftTo('seconds') < this.lower.shiftTo('seconds'))
+            (
+                this.type === ConditionalType.CATEGORY
+                && value > 0
+                && value < this.lower
+            )
+            || (
+                this.type === ConditionalType.DURATION
+                && value.shiftTo('seconds') > 0
+                && value.shiftTo('seconds') < this.lower.shiftTo('seconds'))
         ) {
-            throw new TypeError('The third argument must be greater than or equal to lower). lower was (' + this.lower + ') and upper was (' + value + ')');
+            throw new TypeError('The third argument must be greater than or equal to lower, or 0. lower was (' + this.lower + ') and upper was (' + value + ')');
         }
 
         return value;
