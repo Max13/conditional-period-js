@@ -326,4 +326,17 @@ describe('ConditionalCollection tests', function () {
         assert.strictEqual(c.length, 3);
     });
 
+    it('Correctly iterate over it', function () {
+        let c = ConditionalCollection.fromArray([
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P5D'), Duration.fromISO('P10D')),
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P6D'), Duration.fromISO('P8D'), Duration.fromISO('P20D')),
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P9D'), Duration.fromISO('P11D'), Duration.fromISO('P30D')),
+            ]),
+            i = 0;
+
+        for (const period of c) {
+            assert.strictEqual(c.container[i++], period);
+        }
+    });
+
 });

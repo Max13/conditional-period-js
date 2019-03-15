@@ -206,6 +206,15 @@ class ConditionalCollection {
     get length() {
         return this.container.length;
     }
+
+    /**
+     * Iterable and Iterator protocols
+     *
+     * @return object
+     */
+    [Symbol.iterator]() {
+        return this.container[Symbol.iterator]();
+    }
 };
 
 module.exports = ConditionalCollection;
