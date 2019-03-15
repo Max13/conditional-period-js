@@ -138,8 +138,6 @@ describe('ConditionalCollection tests', function () {
             ],
             c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]');
 
-        console.log(c);
-
         assert.instanceOf(c, ConditionalCollection);
         assert.deepEqual(arr, c.container);
     });
