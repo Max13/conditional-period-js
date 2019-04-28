@@ -130,6 +130,12 @@ class ConditionalPeriod {
             throw new TypeError('ConditionalPeriod must be instanciated with 4 arguments. ' + arguments.length + ' given.');
         }
 
+        Object.defineProperty(this, 'key', {
+            configurable: false,
+            enumerable: false,
+            value: Math.random().toString(16).substring(2, 6),
+            writable: false,
+        });
         this.type = this.checkTypeArgument(type);
         this.lower = this.checkLowerArgument(lower);
         this.upper = this.checkUpperArgument(upper);

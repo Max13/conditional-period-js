@@ -94,6 +94,8 @@ describe('ConditionalPeriod tests', function () {
         let c = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'));
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
+        assert.strictEqual(c.type, ConditionalType.CATEGORY);
         assert.strictEqual(c.type, ConditionalType.CATEGORY);
         assert.strictEqual(c.lower, 1);
         assert.strictEqual(c.upper, 2);
@@ -104,6 +106,7 @@ describe('ConditionalPeriod tests', function () {
         let c = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 0, Duration.fromISO('P1D'));
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.CATEGORY);
         assert.strictEqual(c.lower, 1);
         assert.strictEqual(c.upper, 0);
@@ -119,6 +122,7 @@ describe('ConditionalPeriod tests', function () {
         );
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.DURATION);
         assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
         assert.isTrue(c.upper.equals(Duration.fromISO('P2D')));
@@ -134,6 +138,7 @@ describe('ConditionalPeriod tests', function () {
         );
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.DURATION);
         assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
         assert.isTrue(c.upper.equals(Duration.fromISO('P0D')));
@@ -149,6 +154,7 @@ describe('ConditionalPeriod tests', function () {
         );
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.DURATION);
         assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
         assert.isTrue(c.upper.equals(Duration.fromISO('P2D')));
@@ -164,6 +170,7 @@ describe('ConditionalPeriod tests', function () {
         );
 
         assert.isTrue(c instanceof ConditionalPeriod);
+        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.DURATION);
         assert.isTrue(c.lower.equals(Duration.fromISO('P1D')));
         assert.isTrue(c.upper.equals(Duration.fromISO('P0D')));
@@ -182,6 +189,7 @@ describe('ConditionalPeriod tests', function () {
         cp.upper = upper;
         cp.result = result;
 
+        assert.isString(cp.key);
         assert.notStrictEqual(cp.type, type);
         assert.notStrictEqual(cp.lower, lower);
         assert.notStrictEqual(cp.upper, upper);
@@ -214,12 +222,14 @@ describe('ConditionalPeriod tests', function () {
             c2 = ConditionalPeriod.parse('DP2DP4DP6D');
 
         assert.isTrue(c1 instanceof ConditionalPeriod);
+        assert.isString(c1.key);
         assert.strictEqual(c1.type, ConditionalType.CATEGORY);
         assert.strictEqual(c1.lower, 2);
         assert.strictEqual(c1.upper, 4);
         assert.isTrue(c1.result.equals(Duration.fromISO('P6D')));
 
         assert.isTrue(c2 instanceof ConditionalPeriod);
+        assert.isString(c2.key);
         assert.strictEqual(c2.type, ConditionalType.DURATION);
         assert.isTrue(c2.lower.equals(Duration.fromISO('P2D')));
         assert.isTrue(c2.upper.equals(Duration.fromISO('P4D')));
