@@ -25,17 +25,17 @@ describe('ConditionalCollection tests', function () {
     });
 
     it('Creating a ConditionalCollection with a Category ConditionalPeriod', function () {
-        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'));
+        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'), true);
 
-        assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0]);
-        assert.deepEqual(cp, ConditionalCollection.create(cp).container[0]);
+        assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0].withoutKey());
+        assert.deepEqual(cp, ConditionalCollection.create(cp).container[0].withoutKey());
     });
 
     it('Creating a ConditionalCollection with a Duration ConditionalPeriod', function () {
-        let cp = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P3D'));
+        let cp = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P3D'), true);
 
-        assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0]);
-        assert.deepEqual(cp, ConditionalCollection.create(cp).container[0]);
+        assert.deepEqual(cp, ConditionalCollection.create(cp.toString()).container[0].withoutKey());
+        assert.deepEqual(cp, ConditionalCollection.create(cp).container[0].withoutKey());
     });
 
     it('Fails parsing a ConditionalCollection with incorrect values', function () {
@@ -56,19 +56,19 @@ describe('ConditionalCollection tests', function () {
     it('Parsing a ConditionalCollection with a Category ConditionalPeriod', function () {
         let c = new ConditionalCollection;
 
-        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')));
-        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'), true));
+        c.container.push(new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D'), true));
 
-        assert.deepEqual(c, ConditionalCollection.parse('C1-2P1D,C3-4P2D'));
+        assert.deepEqual(c, ConditionalCollection.parse('C1-2P1D,C3-4P2D').withoutKey());
     });
 
     it('Creating a ConditionalCollection with a Duration ConditionalPeriod', function () {
         let c = new ConditionalCollection;
 
-        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')));
-        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')));
+        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D'), true));
+        c.container.push(new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D'), true));
 
-        assert.deepEqual(c, ConditionalCollection.parse('DP1DP2DP1D,DP3DP4DP2D'));
+        assert.deepEqual(c, ConditionalCollection.parse('DP1DP2DP1D,DP3DP4DP2D').withoutKey());
     });
 
     it('Fails instanciating a ConditionalCollection.fromArray() with incorrect values', function () {
@@ -122,10 +122,10 @@ describe('ConditionalCollection tests', function () {
 
     it('Instanciate a ConditionalCollection from json (Category)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'), true),
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D'), true),
             ],
-            c = ConditionalCollection.fromJson('["C1-2P1D","C3-4P2D"]');
+            c = ConditionalCollection.fromJson('["C1-2P1D","C3-4P2D"]').withoutKey();
 
         assert.instanceOf(c, ConditionalCollection);
         assert.deepEqual(arr, c.container);
@@ -133,10 +133,10 @@ describe('ConditionalCollection tests', function () {
 
     it('Instanciate a ConditionalCollection from json (Duration)', function () {
         let arr = [
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D')),
-                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D')),
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D'), true),
+                new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D'), true),
             ],
-            c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]');
+            c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]').withoutKey();
 
         assert.instanceOf(c, ConditionalCollection);
         assert.deepEqual(arr, c.container);
@@ -278,6 +278,15 @@ describe('ConditionalCollection tests', function () {
         assert.strictEqual(c.find('P6D'), arr[1]);
         assert.strictEqual(c.find('P7D'), arr[1]);
         assert.strictEqual(c.find('P8D'), arr[1]);
+    });
+
+    it('Correctly outputs a ConditionalCollection without keys', function () {
+        let c = ConditionalCollection.fromArray([
+                new ConditionalPeriod(ConditionalType.CATEGORY, 3, 5, Duration.fromISO('P10D')),
+            ]);
+
+        assert.exists(c.container[0].key);
+        assert.notExists(c.withoutKey().container[0].key);
     });
 
     it('Correctly toString() for Category ConditionalCollection', function () {

@@ -166,6 +166,21 @@ class ConditionalCollection {
     }
 
     /**
+     * Clone this removing the key attribute in container
+     *
+     * @return ConditionalCollection
+     */
+    withoutKey() {
+        let newObj = new ConditionalCollection;
+
+        this.container.forEach(function (period) {
+            newObj.container.push(period.withoutKey());
+        });
+
+        return newObj;
+    }
+
+    /**
      * Arrayify this object
      *
      * @return Array Array of ConditionalPeriod
