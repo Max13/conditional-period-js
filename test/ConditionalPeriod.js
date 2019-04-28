@@ -10,7 +10,7 @@ describe('ConditionalPeriod tests', function () {
             result = Duration.fromISO('P1D'),
             exception = /^The first argument must be one of the ConditionalType constants \(ConditionalType\.CATEGORY or ConditionalType\.DURATION\)/;
 
-        assert.throws(() => new ConditionalPeriod, /^ConditionalPeriod must be instanciated with 4 arguments/);
+        assert.throws(() => new ConditionalPeriod, /^ConditionalPeriod must be instanciated with 4 or 5 arguments/);
         assert.throws(() => new ConditionalPeriod(null, lower, upper, result), exception);
         assert.throws(() => new ConditionalPeriod(-1, lower, upper, result), exception);
         assert.throws(() => new ConditionalPeriod(0, lower, upper, result), exception);
@@ -94,12 +94,24 @@ describe('ConditionalPeriod tests', function () {
         let c = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'));
 
         assert.isTrue(c instanceof ConditionalPeriod);
-        assert.isString(c.key);
         assert.strictEqual(c.type, ConditionalType.CATEGORY);
         assert.strictEqual(c.type, ConditionalType.CATEGORY);
         assert.strictEqual(c.lower, 1);
         assert.strictEqual(c.upper, 2);
         assert.isTrue(c.result.equals(Duration.fromISO('P1D')));
+        assert.isString(c.key);
+    });
+
+    it('Can instanciate a Category ConditionalPeriod without key', function () {
+        let c = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'), true);
+
+        assert.isTrue(c instanceof ConditionalPeriod);
+        assert.strictEqual(c.type, ConditionalType.CATEGORY);
+        assert.strictEqual(c.type, ConditionalType.CATEGORY);
+        assert.strictEqual(c.lower, 1);
+        assert.strictEqual(c.upper, 2);
+        assert.isTrue(c.result.equals(Duration.fromISO('P1D')));
+        assert.notExists(c.key);
     });
 
     it('Can instanciate a Category ConditionalPeriod with 0 upper', function () {
@@ -288,6 +300,13 @@ describe('ConditionalPeriod tests', function () {
         assert.isTrue(cp.match('P4D'));
         assert.isTrue(cp.match('P5D'));
         assert.isTrue(cp.match('P6D'));
+    });
+
+    it('Correctly outputs withoutKey()', function () {
+        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y'));
+
+        assert.exists(cp.key);
+        assert.notExists(cp.withoutKey().key);
     });
 
     it('Correctly toString() for Category ConditionalPeriod', function () {

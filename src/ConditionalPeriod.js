@@ -122,24 +122,22 @@ class ConditionalPeriod {
      *                                                      - as Carbon\CarbonInterval
      *                                                      - as string, used to construct a
      *                                                        Carbon\CarbonInterval
+     * @param  bool                             $withoutKey true to generate without "key" property
      *
      * @throws TypeError                                The argument couldn't be parsed
      */
-    constructor(type, lower, upper, result) {
-        if (arguments.length !== 4) {
-            throw new TypeError('ConditionalPeriod must be instanciated with 4 arguments. ' + arguments.length + ' given.');
+    constructor(type, lower, upper, result, withoutKey = false) {
+        if (arguments.length < 4 || arguments.length > 5) {
+            throw new TypeError('ConditionalPeriod must be instanciated with 4 or 5 arguments. ' + arguments.length + ' given.');
         }
 
-        Object.defineProperty(this, 'key', {
-            configurable: false,
-            enumerable: false,
-            value: Math.random().toString(16).substring(2, 6),
-            writable: false,
-        });
         this.type = this.checkTypeArgument(type);
         this.lower = this.checkLowerArgument(lower);
         this.upper = this.checkUpperArgument(upper);
         this.result = this.checkResultArgument(result);
+        if (!withoutKey) {
+            this.key = Math.random().toString(16).substring(2, 6);
+        }
 
         Object.freeze(this);
     }
@@ -219,6 +217,20 @@ class ConditionalPeriod {
         }
 
         return value >= this.lower && value <= this.upper;
+    }
+
+    /**
+     * Clone this without the key attribute
+     *
+     * @return ConditionalPeriod
+     */
+    withoutKey() {
+        var newObj = Object.assign({}, this);
+
+        delete newObj.key;
+        Object.freeze(newObj);
+
+        return newObj;
     }
 
     /**
