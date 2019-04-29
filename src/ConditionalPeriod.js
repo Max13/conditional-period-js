@@ -139,7 +139,7 @@ class ConditionalPeriod {
             this.key = Math.random().toString(16).substring(2, 6);
         }
 
-        Object.freeze(this);
+        Object.seal(this);
     }
 
     /**
@@ -228,7 +228,7 @@ class ConditionalPeriod {
         var newObj = Object.assign({}, this);
 
         delete newObj.key;
-        Object.freeze(newObj);
+        Object.seal(newObj);
 
         return newObj;
     }

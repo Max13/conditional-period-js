@@ -189,25 +189,6 @@ describe('ConditionalPeriod tests', function () {
         assert.isTrue(c.result.equals(Duration.fromISO('P3D')));
     });
 
-    it('Fails modifying instanciated ConditionalPeriod', function () {
-        let type = ConditionalPeriod.DURATION,
-            lower = 2,
-            upper = 4,
-            result = Duration.fromISO('P6D'),
-            cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P3D'));
-
-        cp.type = type;
-        cp.lower = lower;
-        cp.upper = upper;
-        cp.result = result;
-
-        assert.isString(cp.key);
-        assert.notStrictEqual(cp.type, type);
-        assert.notStrictEqual(cp.lower, lower);
-        assert.notStrictEqual(cp.upper, upper);
-        assert.isFalse(cp.result.equals(result));
-    });
-
     it('Fails parseToArray with malformed invalid values', function () {
         let exception = /^Argument passed to parseToArray\(\) must be a string/;
 
