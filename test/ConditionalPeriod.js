@@ -283,11 +283,61 @@ describe('ConditionalPeriod tests', function () {
         assert.isTrue(cp.match('P6D'));
     });
 
-    it('Correctly outputs withoutKey()', function () {
-        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y'));
+    it('Fails checking equality with invalid types', function () {
+        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y')),
+            exception = /^Equality can only be checked with ConditionalPeriod/;
 
-        assert.exists(cp.key);
-        assert.notExists(cp.withoutKey().key);
+        assert.throws(() => cp.equals(null), exception);
+        assert.throws(() => cp.equals(-1), exception);
+        assert.throws(() => cp.equals(0), exception);
+        assert.throws(() => cp.equals(1), exception);
+        assert.throws(() => cp.equals(2), exception);
+        assert.throws(() => cp.equals({}), exception);
+        assert.throws(() => cp.equals([]), exception);
+    });
+
+    it('Check Category Conditional Period equality not being equal', function () {
+        let cp1 = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y')),
+            cp2 = new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P1Y'));
+
+        assert.isFalse(cp1.equals(cp2));
+    });
+
+    it('Check Category Conditional Period equality being equal', function () {
+        let cp1 = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y')),
+            cp2 = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y'));
+
+        assert.isTrue(cp1.equals(cp2));
+    });
+
+    it('Check Duration Conditional Period equality not being equal', function () {
+        let cp1 = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1M'), Duration.fromISO('P2M'), Duration.fromISO('P1Y')),
+            cp2 = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3M'), Duration.fromISO('P4M'), Duration.fromISO('P1Y'));
+
+        assert.isFalse(cp1.equals(cp2));
+    });
+
+    it('Check Duration Conditional Period equality being equal', function () {
+        let cp1 = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1M'), Duration.fromISO('P2M'), Duration.fromISO('P1Y')),
+            cp2 = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1M'), Duration.fromISO('P2M'), Duration.fromISO('P1Y'));
+
+        assert.isTrue(cp1.equals(cp2));
+    });
+
+    it('Correctly clones a Category ConditionalPeriod', function () {
+        let cp = new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1Y')),
+            clone = cp.clone();
+
+        assert.strictEqual(clone.toString(), cp.toString());
+        assert.notEqual(clone.key, cp.key);
+    });
+
+    it('Correctly clones a Duration ConditionalPeriod', function () {
+        let cp = new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1M'), Duration.fromISO('P2M'), Duration.fromISO('P1Y')),
+            clone = cp.clone();
+
+        assert.strictEqual(clone.toString(), cp.toString());
+        assert.notEqual(clone.key, cp.key);
     });
 
     it('Correctly toString() for Category ConditionalPeriod', function () {

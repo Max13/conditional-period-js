@@ -220,17 +220,44 @@ class ConditionalPeriod {
     }
 
     /**
-     * Clone this without the key attribute
+     * Check if this is equal to other
+     * Equality with durations is checked with absolute values
+     *
+     * @param  ConditionalPeriod other
+     * @return boolean
+     *
+     * @throws TypeError
+     */
+    equals(other) {
+        if (!(other instanceof ConditionalPeriod)) {
+            throw new TypeError('Equality can only be checked with ConditionalPeriod, ' + typeof $other + ' given.');
+        }
+
+        if (this.type === ConditionalType.CATEGORY) {
+            return this.type === other.type
+                && this.lower === other.lower
+                && this.upper === other.upper
+                && this.result.as('milliseconds') === other.result.as('milliseconds');
+        }
+
+        return  this.type === other.type
+            &&  this.lower.as('milliseconds') === other.lower.as('milliseconds')
+            &&  this.upper.as('milliseconds') === other.upper.as('milliseconds')
+            &&  this.result.as('milliseconds') === other.result.as('milliseconds');
+    }
+
+    /**
+     * Deep clone this, refreshing the key attribute
      *
      * @return ConditionalPeriod
      */
-    withoutKey() {
-        var newObj = Object.assign({}, this);
-
-        delete newObj.key;
-        Object.seal(newObj);
-
-        return newObj;
+    clone() {
+        return new ConditionalPeriod(
+            this.type,
+            Duration.isDuration(this.lower) ? Duration.fromObject(this.lower.toObject()) : this.lower,
+            Duration.isDuration(this.upper) ? Duration.fromObject(this.upper.toObject()) : this.upper,
+            Duration.fromObject(this.result.toObject())
+        );
     }
 
     /**

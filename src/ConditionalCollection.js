@@ -166,18 +166,50 @@ class ConditionalCollection {
     }
 
     /**
-     * Clone this removing the key attribute in container
+     * Check if this is equal to other
+     * Equality with durations is checked with absolute values
+     *
+     * @param  ConditionalCollection other
+     * @return boolean
+     *
+     * @throws TypeError
+     */
+    equals(other) {
+        if (!(other instanceof ConditionalCollection)) {
+            throw new TypeError('Equality can only be checked with ConditionalCollection, ' + typeof $other + ' given.');
+        }
+
+        if (this.length !== other.length) {
+            return false;
+        }
+
+        try {
+            this.container.forEach(function (period, index) {
+                if (!period.equals(other.container[index])) {
+                    throw false;
+                }
+            });
+        } catch (e) {
+            console.log('Catched', e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Deep clone this
      *
      * @return ConditionalCollection
      */
-    withoutKey() {
-        let newObj = new ConditionalCollection;
+    clone() {
+        let newColl = new ConditionalCollection;
 
         this.container.forEach(function (period) {
-            newObj.container.push(period.withoutKey());
+            newColl.container.push(period.clone());
         });
 
-        return newObj;
+        return newColl;
     }
 
     /**
