@@ -96,7 +96,7 @@ class ConditionalCollection {
      *
      * @throws TypeError
      */
-    static fromJson(json) {
+    static fromJSON(json) {
         if (typeof json !== 'string') {
             throw new TypeError('First argument of fromJson() must be a string. ' + typeof json + ' given.');
         }
@@ -228,12 +228,14 @@ class ConditionalCollection {
     }
 
     /**
-     * Serialize this object to JSON
+     * Object.toJSON() override
      *
-     * @return string JSON string of ConditionalCollection
+     * @return Data to be stringified
+     *
+     * @note https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior
      */
-    toJson() {
-        return JSON.stringify(this.toArray);
+    toJSON() {
+        return this.toArray();
     }
 
     /**

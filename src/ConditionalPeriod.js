@@ -201,6 +201,15 @@ class ConditionalPeriod {
     }
 
     /**
+     * parse overload
+     *
+     * @overloads parse
+     */
+    static fromJSON(json) {
+        return this.parse(json);
+    }
+
+    /**
      * Match the given value to the current condition
      *
      * @param  Duration|string|int value The value to match
@@ -258,6 +267,17 @@ class ConditionalPeriod {
             Duration.isDuration(this.upper) ? Duration.fromObject(this.upper.toObject()) : this.upper,
             Duration.fromObject(this.result.toObject())
         );
+    }
+
+    /**
+     * Object.toJSON() override
+     *
+     * @return Data to be stringified
+     *
+     * @note https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior
+     */
+    toJSON() {
+        return this.toString();
     }
 
     /**

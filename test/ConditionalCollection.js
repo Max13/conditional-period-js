@@ -107,17 +107,17 @@ describe('ConditionalCollection tests', function () {
         assert.deepEqual(arr, c.container);
     });
 
-    it('Fails instanciating a ConditionalCollection.fromJson() with incorrect values', function () {
-        let exception = /^First argument of fromJson\(\) must be a string/;
+    it('Fails instanciating a ConditionalCollection.fromJSON() with incorrect values', function () {
+        let exception = /^First argument of fromJSON\(\) must be a string/;
 
-        assert.throws(() => ConditionalCollection.fromJson(null), exception);
-        assert.throws(() => ConditionalCollection.fromJson(-1), exception);
-        assert.throws(() => ConditionalCollection.fromJson(0), exception);
-        assert.throws(() => ConditionalCollection.fromJson(1), exception);
-        assert.throws(() => ConditionalCollection.fromJson(2), exception);
-        assert.throws(() => ConditionalCollection.fromJson({}), exception);
-        assert.throws(() => ConditionalCollection.fromJson(Duration.fromISO('P1D')), exception);
-        assert.throws(() => ConditionalCollection.fromJson(new ConditionalCollection), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(null), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(-1), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(0), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(1), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(2), exception);
+        assert.throws(() => ConditionalCollection.fromJSON({}), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(Duration.fromISO('P1D')), exception);
+        assert.throws(() => ConditionalCollection.fromJSON(new ConditionalCollection), exception);
     });
 
     it('Instanciate a ConditionalCollection from json (Category)', function () {
@@ -125,7 +125,7 @@ describe('ConditionalCollection tests', function () {
                 new ConditionalPeriod(ConditionalType.CATEGORY, 1, 2, Duration.fromISO('P1D'), true),
                 new ConditionalPeriod(ConditionalType.CATEGORY, 3, 4, Duration.fromISO('P2D'), true),
             ],
-            c = ConditionalCollection.fromJson('["C1-2P1D","C3-4P2D"]');
+            c = ConditionalCollection.fromJSON('["C1-2P1D","C3-4P2D"]');
 
         assert.instanceOf(c, ConditionalCollection);
         assert.strictEqual(ConditionalCollection.fromArray(arr).toString(), c.toString());
@@ -136,7 +136,7 @@ describe('ConditionalCollection tests', function () {
                 new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P1D'), Duration.fromISO('P2D'), Duration.fromISO('P1D'), true),
                 new ConditionalPeriod(ConditionalType.DURATION, Duration.fromISO('P3D'), Duration.fromISO('P4D'), Duration.fromISO('P2D'), true),
             ],
-            c = ConditionalCollection.fromJson('["DP1DP2DP1D","DP3DP4DP2D"]');
+            c = ConditionalCollection.fromJSON('["DP1DP2DP1D","DP3DP4DP2D"]');
 
         assert.instanceOf(c, ConditionalCollection);
         assert.strictEqual(ConditionalCollection.fromArray(arr).toString(), c.toString());
