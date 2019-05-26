@@ -8,12 +8,10 @@ const ConditionalType = require('./ConditionalType.js');
  */
 class ConditionalCollection {
     /**
-     * Construct the internal container and seal the object
+     * Construct the internal container
      */
     constructor() {
         this.container = [];
-
-        Object.seal(this);
     }
 
     /**
@@ -98,7 +96,7 @@ class ConditionalCollection {
      */
     static fromJSON(json) {
         if (typeof json !== 'string') {
-            throw new TypeError('First argument of fromJson() must be a string. ' + typeof json + ' given.');
+            throw new TypeError('First argument of fromJSON() must be a string. ' + typeof json + ' given.');
         }
 
         return this.fromArray(JSON.parse(json));
